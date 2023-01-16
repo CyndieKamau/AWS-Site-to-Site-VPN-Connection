@@ -1,0 +1,196 @@
+! Amazon Web Services
+! Virtual Private Cloud
+
+! AWS utilizes unique identifiers to manipulate the configuration of
+! a VPN Connection. Each VPN Connection is assigned an identifier and is
+! associated with two other identifiers, namely the
+! Customer Gateway Identifier and Virtual Private Gateway Identifier.
+!
+! Your VPN Connection ID 		  : vpn-04c4928f53789cada
+! Your Virtual Private Gateway ID  : vgw-09626d5260437f07b
+! Your Customer Gateway ID		  : cgw-06e352ac9845b9871
+!
+!
+! This configuration consists of two tunnels. Both tunnels must be
+! configured on your Customer Gateway for redundancy.
+!
+! --------------------------------------------------------------------------------
+! IPSec Tunnel #1
+! --------------------------------------------------------------------------------
+! #1: Internet Key Exchange (IKE) Configuration
+!
+! A policy is established for the supported ISAKMP encryption, authentication, Diffie-Hellman, lifetime,
+! and key parameters.The IKE peer is configured with the supported IKE encryption,  authentication, Diffie-Hellman, lifetime, and key
+! parameters.Please note, these sample configurations are for the minimum requirement of AES128, SHA1, and DH Group 2.
+! Category "VPN" connections in the GovCloud region have a minimum requirement of AES128, SHA2, and DH Group 14.
+! You will need to modify these sample configuration files to take advantage of AES256, SHA256,  or other DH
+! groups like 2, 14-18, 22, 23, and 24.
+! NOTE: If you customized tunnel options when creating or modifying your VPN connection, you may need to modify these sample configurations to match the custom settings for your tunnels.
+!
+! Higher parameters are only available for VPNs of category "VPN," and not for "VPN-Classic".
+! The address of the external interface for your customer gateway must be a static address.
+! Your customer gateway may reside behind a device performing network address translation (NAT). To
+! ensure that NAT traversal (NAT-T) can function, you must adjust your firewall
+! rules to unblock UDP port 4500.
+! If not behind NAT, and you are not using an Accelerated VPN, we recommend disabling NAT-T. If you are using an Accelerated VPN, make sure that NAT-T is enabled.
+!
+!
+Go to VPN-->IPSec. Add a new Phase1 entry (click + button )
+
+General information
+ a. Disabled : uncheck
+ b. Key Exchange version :V1
+ c. Internet Protocol : IPv4
+ d. Interface : WAN
+ e. Remote Gateway: 34.192.123.135
+ f. Description: Amazon-IKE-vpn-04c4928f53789cada-0
+
+ Phase 1 proposal (Authentication)
+ a. Authentication Method: Mutual PSK
+ b. Negotiation mode : Main
+ c. My identifier : My IP address
+ d. Peer identifier : Peer IP address
+ e. Pre-Shared Key: qCkFPf4jaNZqJRpYm2ay9oVav6uIwTBv
+
+ Phase 1 proposal (Algorithms)
+ a. Encryption algorithm : aes128
+ b. Hash algorithm :  sha1
+ c. DH key group :  2
+ d. Lifetime : 28800 seconds
+
+ Advanced Options
+ a. Disable Rekey : uncheck
+ b. Responder Only : uncheck
+ c. NAT Traversal : Auto
+ d. Dead Peer Detection : Enable DPD
+    Delay between requesting peer acknowledgement : 10 seconds
+    Number of consecutive failures allowed before disconnect : 3 retries
+
+
+
+! #2: IPSec Configuration
+!
+! The IPSec transform set defines the encryption, authentication, and IPSec
+! mode parameters.
+! Category "VPN" connections in the GovCloud region have a minimum requirement of AES128, SHA2, and DH Group 14.
+! Please note, you may use these additionally supported IPSec parameters for encryption like AES256 and other DH groups like 2, 5, 14-18, 22, 23, and 24.
+! Higher parameters are only available for VPNs of category "VPN," and not for "VPN-Classic".
+
+Expand the VPN configuration clicking in "+" and then create a new Phase2 entry as follows:
+
+ a. Disabled :uncheck
+ b. Mode : Tunnel
+ c. Local Network : Type: LAN subnet
+    Address :  ! Enter your local network CIDR in the Address tab
+ d. Remote Network : Type : Network
+    Address :  ! Enter your remote network CIDR in the Address tab
+ e. Description : Amazon-IPSec-vpn-04c4928f53789cada-0
+
+ Phase 2 proposal (SA/Key Exchange)
+ a. Protocol : ESP
+ b. Encryption algorithms : aes128
+  c. Hash algorithms : hmac-sha1-96
+  d. PFS key group :   2
+e. Lifetime : 3600 seconds
+
+Advanced Options
+
+Automatically ping host : ! Provide the IP address of an EC2 instance in VPC that will respond to ICMP.
+
+
+! --------------------------------------------------------------------------------
+
+
+! --------------------------------------------------------------------------------
+! IPSec Tunnel #2
+! --------------------------------------------------------------------------------
+! #1: Internet Key Exchange (IKE) Configuration
+!
+! A policy is established for the supported ISAKMP encryption, authentication, Diffie-Hellman, lifetime,
+! and key parameters.The IKE peer is configured with the supported IKE encryption,  authentication, Diffie-Hellman, lifetime, and key
+! parameters.Please note, these sample configurations are for the minimum requirement of AES128, SHA1, and DH Group 2.
+! Category "VPN" connections in the GovCloud region have a minimum requirement of AES128, SHA2, and DH Group 14.
+! You will need to modify these sample configuration files to take advantage of AES256, SHA256,  or other DH
+! groups like 2, 14-18, 22, 23, and 24.
+! NOTE: If you customized tunnel options when creating or modifying your VPN connection, you may need to modify these sample configurations to match the custom settings for your tunnels.
+!
+! Higher parameters are only available for VPNs of category "VPN," and not for "VPN-Classic".
+! The address of the external interface for your customer gateway must be a static address.
+! Your customer gateway may reside behind a device performing network address translation (NAT). To
+! ensure that NAT traversal (NAT-T) can function, you must adjust your firewall
+! rules to unblock UDP port 4500.
+! If not behind NAT, and you are not using an Accelerated VPN, we recommend disabling NAT-T. If you are using an Accelerated VPN, make sure that NAT-T is enabled.
+!
+!
+Go to VPN-->IPSec. Add a new Phase1 entry (click + button )
+
+General information
+ a. Disabled : uncheck
+ b. Key Exchange version :V1
+ c. Internet Protocol : IPv4
+ d. Interface : WAN
+ e. Remote Gateway: 54.160.193.187
+ f. Description: Amazon-IKE-vpn-04c4928f53789cada-1
+
+ Phase 1 proposal (Authentication)
+ a. Authentication Method: Mutual PSK
+ b. Negotiation mode : Main
+ c. My identifier : My IP address
+ d. Peer identifier : Peer IP address
+ e. Pre-Shared Key: _M9TgIkXSCwxsp9cXckIvVZL1UNzMELB
+
+ Phase 1 proposal (Algorithms)
+ a. Encryption algorithm : aes128
+ b. Hash algorithm :  sha1
+ c. DH key group :  2
+ d. Lifetime : 28800 seconds
+
+ Advanced Options
+ a. Disable Rekey : uncheck
+ b. Responder Only : uncheck
+ c. NAT Traversal : Auto
+ d. Dead Peer Detection : Enable DPD
+    Delay between requesting peer acknowledgement : 10 seconds
+    Number of consecutive failures allowed before disconnect : 3 retries
+
+
+
+! #2: IPSec Configuration
+!
+! The IPSec transform set defines the encryption, authentication, and IPSec
+! mode parameters.
+! Category "VPN" connections in the GovCloud region have a minimum requirement of AES128, SHA2, and DH Group 14.
+! Please note, you may use these additionally supported IPSec parameters for encryption like AES256 and other DH groups like 2, 5, 14-18, 22, 23, and 24.
+! Higher parameters are only available for VPNs of category "VPN," and not for "VPN-Classic".
+
+Expand the VPN configuration clicking in "+" and then create a new Phase2 entry as follows:
+
+ a. Disabled :uncheck
+ b. Mode : Tunnel
+ c. Local Network : Type: LAN subnet
+    Address :  ! Enter your local network CIDR in the Address tab
+ d. Remote Network : Type : Network
+    Address :  ! Enter your remote network CIDR in the Address tab
+ e. Description : Amazon-IPSec-vpn-04c4928f53789cada-1
+
+ Phase 2 proposal (SA/Key Exchange)
+ a. Protocol : ESP
+ b. Encryption algorithms : aes128
+  c. Hash algorithms : hmac-sha1-96
+  d. PFS key group :   2
+e. Lifetime : 3600 seconds
+
+Advanced Options
+
+Automatically ping host : ! Provide the IP address of an EC2 instance in VPC that will respond to ICMP.
+
+
+! --------------------------------------------------------------------------------
+
+
+
+! Additional Notes and Questions
+!  - Amazon Virtual Private Cloud Getting Started Guide:
+!       http://docs.amazonwebservices.com/AmazonVPC/latest/GettingStartedGuide
+!  - Amazon Virtual Private Cloud Network Administrator Guide:
+!       http://docs.amazonwebservices.com/AmazonVPC/latest/NetworkAdminGuide
